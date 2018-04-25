@@ -311,8 +311,10 @@ exp(ASE_Test)
 
 
 #---------------olsrr Package---------------------Linear Model-------------------------------------#
-#install.packages("olsrr")
-library(olsrr)
+#install.packages("olsrr", dependencies = TRUE)
+#install.packages("robustbase", dependencies = TRUE)
+
+#library(olsrr)
 
 #Full Model
 
@@ -320,37 +322,42 @@ model <-lm(SalePrice ~ .   , data = train)
 
 #Residual vs Fitted Values Plot
 
-ols_rvsp_plot(model)
+# ols_rvsp_plot(model) # deprecated
+
+ols_plot_resid_fit(model)
 
 #Residual Fit Spread Plot
 
-ols_rfs_plot(model)
+#ols_rfs_plot(model)# deprecated
+
+ols_plot_resid_fit_spread(model)
 
 # Collinearity Diagnostics
 
 ols_coll_diag(model)
 
 #Stepwise AIC Backward Elimination Model --------------Regression-----------------------
-b <- ols_stepaic_backward(model,details = TRUE)
+b <- ols_step_backward_aic(model,details = TRUE)
 b
 # ?ols_stepaic_backward
 
 
 # -----------------Final Models-------------------
+# --------------------Best Model------------------
 # Remove Functional, MiscFeature doe test predictions , kaggle 0.12052
 model_b <- lm(logsaleprice ~ MSZoning + Street + LotConfig + LandSlope + Neighborhood + Condition1 + Condition2 + BldgType + HouseStyle + OverallQual + OverallCond + YearBuilt + YearRemodAdd + MasVnrArea + ExterQual + ExterCond + Foundation + BsmtQual + BsmtFinType2 + BsmtFinSF2 + BsmtUnfSF + Heating + HeatingQC + CentralAir + X1stFlrSF + X2ndFlrSF + BedroomAbvGr + TotRmsAbvGrd + Fireplaces + GarageArea + GarageCond + WoodDeckSF + ScreenPorch + Fence + SaleCondition + total_sq_footage + total_baths + logBSMTFinSF1 + logTotalBSMTSF + logGrLivArea , data = train)
 
-# --------------------Best Model------------------
+# --------------------2nd Best Model------------------
 # Custom from Backward Elim Remove Street, MasVnrArea, X1stFlrSF, X2ndFlrSF, Fence, BsmtFinSF2,  logBSMTFinSF1 , logTotalBSMTSF,  BsmtFinType2 , BedroomAbvGr , TotRmsAbvGrd
 # Best kaggle -> 0.12322 Custom from Backward Elim, removed Functional
 model_b <- lm(logsaleprice ~ MSZoning + LotConfig + LandSlope + Neighborhood + Condition1 + Condition2 + BldgType + HouseStyle + OverallQual + OverallCond + YearBuilt + YearRemodAdd + ExterQual + ExterCond + Foundation + BsmtQual + BsmtUnfSF + Heating + HeatingQC + CentralAir + Fireplaces + GarageArea + GarageCond + WoodDeckSF + ScreenPorch + SaleCondition + total_sq_footage + total_baths + logGrLivArea , data = train)
 
 summary(model_b)
 plot(model_b)
-ols_cooksd_barplot(model_b)
+ols_plot_cooksd_bar(model_b)
 #ols_cooksd_chart(model_b)
-ols_srsd_chart(model_b) # Residual
-ols_rsdlev_plot(model_b) # Leverage
+ols_plot_resid_stand(model_b) # Residual
+ols_plot_resid_lev(model_b) # Leverage
 
 predictions_b <- predict(model_b, newdata = test)
 #Exponentiate the predictions
