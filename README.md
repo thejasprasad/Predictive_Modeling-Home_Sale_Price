@@ -1,2 +1,2 @@
 # Predictive_Modeling-Home_Sale_Price
-With 79 explanatory variables describing (almost) every aspect of residential homes in Ames, Iowa, the goal was to predict the final price of each home.
+Analyzed a Kaggle dataset in R to generate a predictive model for predict sale prices of houses in the “test” dataset by creating a model with the “train” dataset. With 79 explanatory variables describing (almost) every aspect of residential homes in Ames, Iowa, the goal was to predict the final price of each home. Kaggle score obtained for this prediction result was 0.1205 (rank 735). Multiple Linear Regression was used to train the model utilizing Forward, Backward and Stepwise Elimination methods.
